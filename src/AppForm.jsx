@@ -10,24 +10,64 @@ import {
   Container,
 } from "@mui/material";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
 
-const AppForm = () => {
+const AppForm = ({
+  handleCurrentUser,
+  selectedParticipant,
+  participations,
+  createParticipation,
+  updateParticipation,
+  handleModal,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [percents, setPercents] = useState(0);
- 
+
+  useEffect(() => {
+    let sum = 0;
+    participations.forEach((item) => {
+      sum += item.participation;
+    });
+    setPercents(sum);
+  }, [participations]);
+
   const formik = useFormik({
     initialValues: { firstName: "", lastName: "", participation: "" },
     onSubmit: async (values, { resetForm }) => {
       setIsLoading(true);
-    },
+      
+      const participationBody = {
+        id: selectedParticipant?.id,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        participation: values.participation,
+      };
 
+      try {
+        if (selectedParticipant) {
+          await updateParticipation(participationBody);
+          handleModal();
+          toast.success("Participação atualizada com sucesso!");
+        } else {
+          await createParticipation(participationBody);
+          toast.success("Participação criada com sucesso!");
+        }
+        setIsLoading(false);
+        resetForm({ values: "" });
+      } catch (error) {
+        console.log(error?.message);
+        setIsLoading(false);
+        resetForm({ values: "" });
+        toast.error("Ops! Algo deu errado, tente novamente.");
+      }
+    },
     validationSchema: Yup.object({
       firstName: Yup.string().required("Primeiro nome é obrigatório"),
       lastName: Yup.string().required("Sobrenome é obrigatório"),
       participation: Yup.number()
         .required("Participação é obrigatório")
         .min(0, "O mínimo possível é 0")
-        .max(100, "O máximo possível é 100"),
+        .max(99, "O máximo possível é 99"),
     }),
   });
 
@@ -39,10 +79,9 @@ const AppForm = () => {
             <Grid item xs={12} sm={3}>
               <FormControl>
                 <TextField
-                  className="Input-data"
                   id="firstName"
                   type="text"
-                  placeholder="First Name"
+                  placeholder="Primeiro Nome"
                   name="firstName"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -59,10 +98,9 @@ const AppForm = () => {
             <Grid item xs={12} sm={3}>
               <FormControl>
                 <TextField
-                  className="Input-data"
                   id="lastName"
                   type="text"
-                  placeholder="Last Name"
+                  placeholder="Sobrenome"
                   name="lastName"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -79,10 +117,9 @@ const AppForm = () => {
             <Grid item xs={12} sm={3}>
               <FormControl>
                 <TextField
-                  className="Input-data"
                   id="participation"
                   type="number"
-                  placeholder="Participation"
+                  placeholder="Participação"
                   name="participation"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -98,12 +135,12 @@ const AppForm = () => {
 
             <Grid item xs={12} sm={3}>
               <Button
-                disabled={
-                  +percents + +formik.values.participation > 100 ||
-                  !!formik.errors.firstName ||
-                  !!formik.errors.lastName ||
-                  !!formik.errors.participation
-                }
+                // disabled={
+                //   +percents + +formik.values.participation > 100 ||
+                //   !!formik.errors.firstName ||
+                //   !!formik.errors.lastName ||
+                //   !!formik.errors.participation
+                // }
                 type="submit"
                 variant="contained"
                 size="medium"
