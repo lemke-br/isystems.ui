@@ -13,7 +13,6 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 
 const AppForm = ({
-  handleCurrentUser,
   selectedParticipant,
   participations,
   createParticipation,
@@ -32,10 +31,14 @@ const AppForm = ({
   }, [participations]);
 
   const formik = useFormik({
-    initialValues: { firstName: "", lastName: "", participation: "" },
+    initialValues: {
+      firstName: selectedParticipant?.firstName ?? "",
+      lastName: selectedParticipant?.lastName ?? "",
+      participation: selectedParticipant?.participation ?? "",
+    },
     onSubmit: async (values, { resetForm }) => {
       setIsLoading(true);
-      
+
       const participationBody = {
         id: selectedParticipant?.id,
         firstName: values.firstName,
@@ -131,22 +134,25 @@ const AppForm = ({
                     formik.errors.participation}
                 </FormHelperText>
               </FormControl>
+              <span style={{ color: "black", fontSize: 16 }}>
+                Disponível: {100 - percents} %
+              </span>
             </Grid>
 
             <Grid item xs={12} sm={3}>
               <Button
-                // disabled={
-                //   +percents + +formik.values.participation > 100 ||
-                //   !!formik.errors.firstName ||
-                //   !!formik.errors.lastName ||
-                //   !!formik.errors.participation
-                // }
+                disabled={
+                  +percents + +formik.values.participation > 100 ||
+                  !!formik.errors.firstName ||
+                  !!formik.errors.lastName ||
+                  !!formik.errors.participation
+                }
                 type="submit"
                 variant="contained"
                 size="medium"
                 style={{ marginTop: 8 }}
               >
-                {isLoading ? <CircularProgress /> : "SEND"}
+                {isLoading ? <CircularProgress /> : "Enviar"}
               </Button>
             </Grid>
           </Grid>

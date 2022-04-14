@@ -12,6 +12,8 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
 import AppForm from "./AppForm";
 
@@ -49,7 +51,7 @@ const AppTable = ({
             <TableRow>
               <TableCell>Firstname</TableCell>
               <TableCell>Lastname</TableCell>
-              <TableCell>Participation</TableCell>
+              <TableCell>Participation&nbsp;(%)</TableCell>
               <TableCell>Opções</TableCell>
             </TableRow>
           </TableHead>
@@ -58,7 +60,7 @@ const AppTable = ({
               <TableRow key={participation.id}>
                 <TableCell>{participation.firstName}</TableCell>
                 <TableCell>{participation.lastName}</TableCell>
-                <TableCell>{participation.participation}%</TableCell>
+                <TableCell>{participation.participation}</TableCell>
                 <TableCell>
                   <IconButton
                     onClick={() => {
@@ -66,12 +68,12 @@ const AppTable = ({
                       handleClickOpen();
                     }}
                   >
-                    Edit
+                    <EditIcon />
                   </IconButton>
                   <IconButton
-                    onClick={() => deleteParticipation(participation)}
+                    onClick={() => deleteParticipation(participation.id)}
                   >
-                    Delete
+                    <DeleteIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>
