@@ -12,7 +12,7 @@ const AppChart = ({ participations }) => {
     const data = [];
 
     participations?.forEach((row) => {
-      labels.push(row.firstName);
+      labels.push(row.firstName + " " + row.lastName);
       data.push(row.participation);
     });
 
