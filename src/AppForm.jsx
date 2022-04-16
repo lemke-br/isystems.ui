@@ -25,7 +25,7 @@ const AppForm = ({
   useEffect(() => {
     let sum = 0;
     participations.forEach((item) => {
-      sum += item.participation;
+      sum += +item.participation;
     });
     setPercents(sum);
   }, [participations]);
@@ -124,7 +124,14 @@ const AppForm = ({
                   type="number"
                   placeholder="Participação"
                   name="participation"
-                  onChange={formik.handleChange}
+                  onChange={(event) => {
+                    setPercents(
+                      +percents -
+                        +formik.values.participation +
+                        +event.target.value
+                    );
+                    formik.handleChange(event);
+                  }}
                   onBlur={formik.handleBlur}
                   value={formik.values.participation}
                 />
@@ -133,7 +140,8 @@ const AppForm = ({
                     formik.touched.participation &&
                     formik.errors.participation}
                 </FormHelperText>
-              </FormControl>
+              </FormControl>{" "}
+              <br />
               <span style={{ color: "black", fontSize: 16 }}>
                 Disponível: {100 - percents} %
               </span>
@@ -142,7 +150,7 @@ const AppForm = ({
             <Grid item xs={12} sm={3}>
               <Button
                 disabled={
-                  +percents + +formik.values.participation > 100 ||
+                  percents > 100 ||
                   !!formik.errors.firstName ||
                   !!formik.errors.lastName ||
                   !!formik.errors.participation
