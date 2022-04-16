@@ -70,7 +70,7 @@ const AppForm = ({
       participation: Yup.number()
         .required("Participação é obrigatório")
         .min(0, "O mínimo possível é 0")
-        .max(99, "O máximo possível é 99"),
+        .max(100, "O máximo possível é 100"),
     }),
   });
 
