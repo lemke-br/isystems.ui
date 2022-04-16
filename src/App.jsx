@@ -69,6 +69,8 @@ const App = () => {
           createParticipation={createParticipation}
         />
       </header>
+      <h1>Sociedade</h1>
+      <p>Quadro societário e investidores da empresa</p>
       <main style={{ marginTop: 32 }}>
         <Container>
           <Grid container spacing={2}>

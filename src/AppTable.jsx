@@ -49,9 +49,9 @@ const AppTable = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Firstname</TableCell>
-              <TableCell>Lastname</TableCell>
-              <TableCell>Participation&nbsp;(%)</TableCell>
+              <TableCell>Primeiro Nome</TableCell>
+              <TableCell>Sobrenome</TableCell>
+              <TableCell>Participação</TableCell>
               <TableCell>Opções</TableCell>
             </TableRow>
           </TableHead>
@@ -60,7 +60,7 @@ const AppTable = ({
               <TableRow key={participation.id}>
                 <TableCell>{participation.firstName}</TableCell>
                 <TableCell>{participation.lastName}</TableCell>
-                <TableCell>{participation.participation}</TableCell>
+                <TableCell>{participation.participation}%</TableCell>
                 <TableCell>
                   <IconButton
                     onClick={() => {
